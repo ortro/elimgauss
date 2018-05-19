@@ -25,8 +25,8 @@ int main(void)
     float s[LIN] = {0.02, 0.25, 0.75, 0.12};
 
     float soma = 0;
-    //float pivo;
-    float ind;
+    float pivo;
+    //float ind;
     // float sum=0;
     float divisor;
     printf("===Matriz dada=== \n");
@@ -38,14 +38,6 @@ int main(void)
         for(j=0;j<COL;j++)
         {
             matriz00[i][j] = matriz[i][j];
-            for(i=0;i<LIN; i++)
-            {
-                for(j=0;j<COL;j++)
-                {
-                    matriz00[i][j] = matriz[i][j];
-
-                }
-            }
         }
     }
     for(i=0;i<LIN-1; i++)
@@ -100,57 +92,30 @@ int main(void)
     {
         f[i]=0;
     }
-    //pivo
-    /*for(i=0;i<LIN; i++)
-      {
-    //soma=0;
-    for(j=0;j<COL;j++)
+    for(i=LIN-1;i>-1;i--)
     {
-    if(i==j)
-    pivo=matriz[i][j];
-    if(j==5)
-    {
-    ind=matriz[i][j];
-    continue;
-    }
-    soma+= matriz[i][j];
-    sum=soma;
-    }
-    sum= sum-matriz[i][i];
-
-    f[i]=((ind-sum)/pivo);
-    }*/
-    /*
-       for(i=3; i>-1; i--)
-       {
-       soma=0;
-       pivo=matriz[i][COL]; 
-       for(j=4; j>-1; j--)
-       {
-
-       if(j==i)
-       {
-       divisor=matriz[i][j];
-       soma+=0;
-       }
-       else
-       soma+=matriz[i][j];
-       }
-       f[i]=(pivo-soma)/divisor;
-       }*/
-    for(i=0; i<LIN; i++)
-    {
-        ind=matriz[i][COL];
-        for(j=0; j<COL-1; j++)
+        for(j=COL-1;j>-1;j--)
         {
-            if(i==j)
+            if(j==COL-1)
             {
-                divisor=matriz[i][j];
+                pivo=matriz[i][j];
+                continue;
+
             }
             else
-                soma+=matriz[i][j];
+            {
+                if(j==i)
+                {
+
+                    divisor=matriz[i][j];
+                }
+                else
+                {
+                    soma+=matriz[i][j]*f[j];
+                }
+            }
         }
-        f[i]=(ind-soma)/divisor;
+        f[i]=(pivo-soma)/divisor;
     }
     for(i=0;i<COL-1;i++)
     {
@@ -159,7 +124,7 @@ int main(void)
 
     printf("\n\n");
 
-    printf("Solucao = ( f1;\tf2;\tf3;\tf4 )\n");
+    printf("Solucao = ( \tf1;\tf2;\tf3;\tf4 )\n");
 
     for(j=0;j<10;j++)
     {
