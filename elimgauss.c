@@ -2,33 +2,36 @@
 
 #define LIN 4
 #define COL 5
+#define NITMAX 5
 
 void printmat(float matriz[][COL]);
 
 int main(void)
 {
     /* Declaracao de variaveis decisorias*/
-    float matriz [LIN][COL] =
+    float matriz[LIN][COL] =
     {
-        {1.234, 5.331, 1.231, -2.174, 6.456},
-        {1.333, 2.346, -4.234, 3.147, 2.502},
-        {2.204, -2.021, 6.001, -1.125, -1.101},
-        {0.211, 7.126, -0.234, 5.003, -2.115},
+        {2, 2, 1, 1, 7},
+        {1, -1, 2, -1, 1},
+        {3, 2, -3, -2, 4},
+        {4, 3, 2, 1, 12},
     };
     /*indices*/
     int i,j,k,w,x,y,z;
+    float soma=0.0;
 
     /*matrizes*/
     float mult[LIN];
     float matriz00[LIN][COL];
-    float f[LIN];
-    float s[LIN] = {0.02, 0.25, 0.75, 0.12};
+    float s[NITMAX+1][LIN];
+    
 
-    float soma = 0;
-    float pivo;
-    //float ind;
-    // float sum=0;
-    float divisor;
+    //Solucoes
+    s[0][0] = 1;
+    s[0][1] = 0;
+    s[0][2] = 0;
+    s[0][3] = 1;
+
     printf("===Matriz dada=== \n");
     printmat(matriz);
     printf("\n\n\n");
@@ -86,62 +89,29 @@ int main(void)
 
     }
 
-    /*Encontrar os valores pra f*/
-    printf("===Calculos para F===\n");
-    for(i=0;i<LIN; i++)
+    //Calculdo xi^[k], onde i = 1,2,3,4
+
+    for(k=0; k < NITMAX; k++)
     {
-        f[i]=0;
-    }
-    for(i=LIN-1;i>-1;i--)
-    {
-        for(j=COL-1;j>-1;j--)
+        s[k+1][LIN-1] = s[k][LIN-1] + (matriz[LIN-1][LIN] / matriz[LIN-1][LIN-1]);
+        for(i=LIN-2; i > -1; i--)
         {
-            if(j==COL-1)
-            {
-                pivo=matriz[i][j];
-                continue;
-
-            }
-            else
-            {
-                if(j==i)
-                {
-
-                    divisor=matriz[i][j];
-                }
-                else
-                {
-                    soma+=matriz[i][j]*f[j];
-                }
-            }
+            soma=0.0;
+            for(j=i+1; j < LIN; j++)
+                soma = soma + matriz[i][j]*s[k][j];
+            s[k+1][i] = s[k][i] + (matriz[i][LIN] - soma)/matriz[i][i] ;
         }
-        f[i]=(pivo-soma)/divisor;
+
     }
-    for(i=0;i<COL-1;i++)
+
+    for(k=0; k < NITMAX; k++)
     {
-        printf("f%d = %f\n",i,f[i]);
+        printf("\n");
+        for(i=0; i < LIN; i++)
+            printf("%f\t", s[k][i]);
     }
 
-    printf("\n\n");
-
-    printf("Solucao = ( \tf1;\tf2;\tf3;\tf4 )\n");
-
-    for(j=0;j<10;j++)
-    {
-        printf("Sf(k = %d) = (",j);
-        for(k=0;k<LIN;k++)
-        {
-            printf("%0.4f",s[k]);
-            if(i!=LIN-1)
-                printf(";");
-            s[k]+=f[k]; 
-
-        }
-        printf(")\n\n");
-
-    }
-    return 0;
-
+   return 0;
 }
 void printmat(float matriz[][COL])
 {
@@ -149,11 +119,8 @@ void printmat(float matriz[][COL])
     for(i=0;i<LIN;i++)
     {
         for(j=0;j<COL; j++)
-        {
             printf("\t%0.4f\t", matriz[i][j]);
-        }
         printf("\n");
     }
-
 }
 
